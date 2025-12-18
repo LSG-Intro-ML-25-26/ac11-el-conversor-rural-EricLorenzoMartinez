@@ -1,3 +1,6 @@
+@namespace
+class SpriteKind:
+    edifici = SpriteKind.create()
 # Amunt
 
 def on_up_pressed():
@@ -47,9 +50,19 @@ nena: Sprite = None
 tiles.set_current_tilemap(tilemap("""
     map
     """))
+casa_intercanvi = sprites.create(assets.image("""
+        casa_intercanvi
+        """),
+    SpriteKind.edifici)
+casa_intercanvi.set_position(129, 130)
+venedor = sprites.create(assets.image("""
+        venedor-front
+        """),
+    SpriteKind.player)
+venedor.set_position(129, 140)
 nena = sprites.create(assets.image("""
     nena-front
     """), SpriteKind.player)
-nena.set_position(130, 250)
+nena.set_position(129, 250)
 scene.camera_follow_sprite(nena)
 controller.move_sprite(nena, 100, 100)
