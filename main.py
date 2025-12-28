@@ -60,6 +60,18 @@ def accio_menu_pagament(selection, selectedIndex):
 
     game.show_long_text("Per aconseguir " + str(quantitat_actual) + " " + producte_actual +
                         ", has de donar " + str(unitats_a_pagar) + " " + selection, DialogLayout.BOTTOM)
+    
+    valor_real_pagat = unitats_a_pagar * valor_unitari_pago
+    valor_real_rebut = quantitat_actual * valor_unitari_compra
+    diferencia_valor = valor_real_pagat - valor_real_rebut
+
+    unfair = True if diferencia_valor>0.01 else False
+
+    if unfair:
+        perdua = Math.round(diferencia_valor*100) / 100
+        game.show_long_text("AVÍS: " +
+        "Estaràs pagant un extra equivalent a " + str(perdua) +
+        " kg de llenya.", DialogLayout.BOTTOM)
 
     controller.move_sprite(nena, 100, 100)
 

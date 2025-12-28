@@ -38,6 +38,7 @@ function obtenir_preu(nom_producte: string): number {
 //  SISTEMA DE MENÚS
 //  Menú de pagament
 function accio_menu_pagament(selection: string, selectedIndex: any) {
+    let perdua: number;
     /** 
     Calcula el canvi final, aplicant l'arrodoniment segons si es
     material divisible o no.
@@ -63,6 +64,15 @@ function accio_menu_pagament(selection: string, selectedIndex: any) {
     }
     
     game.showLongText("Per aconseguir " + ("" + quantitat_actual) + " " + producte_actual + ", has de donar " + ("" + unitats_a_pagar) + " " + selection, DialogLayout.Bottom)
+    let valor_real_pagat = unitats_a_pagar * valor_unitari_pago
+    let valor_real_rebut = quantitat_actual * valor_unitari_compra
+    let diferencia_valor = valor_real_pagat - valor_real_rebut
+    let unfair = diferencia_valor > 0.01 ? true : false
+    if (unfair) {
+        perdua = Math.round(diferencia_valor * 100) / 100
+        game.showLongText("AVÍS: " + "Estaràs pagant un extra equivalent a " + ("" + perdua) + " kg de llenya.", DialogLayout.Bottom)
+    }
+    
     controller.moveSprite(nena, 100, 100)
 }
 
