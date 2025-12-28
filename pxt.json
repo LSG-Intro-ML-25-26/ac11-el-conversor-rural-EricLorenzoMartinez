@@ -1,5 +1,6 @@
 {
     "name": "conversor_EricLorenzoMartinez",
+    "version": "0.0.1",
     "description": "",
     "dependencies": {
         "device": "*",
