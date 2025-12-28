@@ -54,7 +54,7 @@ jobs:
         run: |
           pxt clean
           pxt install
-          pxt build --cloud
+          pxt staticpkg
           
       - name: bundle all
         run: |
