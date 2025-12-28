@@ -163,7 +163,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC, function on_overlap(sprite:
     
  */
     
-    sprite.y += 5
+    sprite.setPosition(129, 160)
     controller.moveSprite(nena, 0, 0)
     menu1 = miniMenu.createMenu(miniMenu.createMenuItem("Llenya _kg_"), miniMenu.createMenuItem("Gallines"), miniMenu.createMenuItem("Patates _kg_"), miniMenu.createMenuItem("Cabres"), miniMenu.createMenuItem("Ous"), miniMenu.createMenuItem("Cavalls"), miniMenu.createMenuItem("SORTIR"))
     menu1.setTitle("Quin producte vols intercanviar?")

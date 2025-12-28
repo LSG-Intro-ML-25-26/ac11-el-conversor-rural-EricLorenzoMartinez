@@ -169,7 +169,7 @@ def on_overlap(sprite, otherSprite):
     Atura el jugador i obre el menú principal.
     """
     global menu1
-    sprite.y += 5
+    sprite.set_position(129, 160)
     controller.move_sprite(nena, 0, 0)
 
     menu1 = miniMenu.create_menu(
