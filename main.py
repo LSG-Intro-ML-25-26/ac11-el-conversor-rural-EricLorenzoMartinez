@@ -1,3 +1,4 @@
+#ERIC LORENZO MARTINEZ
 @namespace
 class SpriteKind:
     edifici = SpriteKind.create()

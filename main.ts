@@ -1,3 +1,4 @@
+// ERIC LORENZO MARTINEZ
 namespace SpriteKind {
     export const edifici = SpriteKind.create()
     export const NPC = SpriteKind.create()
