@@ -3,7 +3,21 @@ namespace SpriteKind {
     export const NPC = SpriteKind.create()
 }
 
+//  VARIABLES GLOBALS I CONFIGURACIÓ
+let quantitat_actual = 1
+let producte_actual = ""
+let nena : Sprite = null
+//  Creació dels objectes menú buits inicials
+let menu_quantitat = miniMenu.createMenu(null)
+let menu1 = miniMenu.createMenu(null)
+let menu_pagament = miniMenu.createMenu(null)
+//  FUNCIONS D'AJUDA (LÒGICA I CÀLCULS)
 function obtenir_preu(nom_producte: string): number {
+    /** 
+    Retorna el valor en Llenya de cada producte.
+    Permet gestionar l'intercanvi bidireccional.
+    
+ */
     if (nom_producte == "Llenya _kg_") {
         return 1
     } else if (nom_producte == "Gallines") {
@@ -21,12 +35,14 @@ function obtenir_preu(nom_producte: string): number {
     return 0
 }
 
-let quantitat_actual = 1
-let producte_actual = ""
-let menu_quantitat = miniMenu.createMenu(null)
-let menu1 = miniMenu.createMenu(null)
-let menu_pagament = miniMenu.createMenu(null)
+//  SISTEMA DE MENÚS
+//  Menú de pagament
 function accio_menu_pagament(selection: string, selectedIndex: any) {
+    /** 
+    Calcula el canvi final, aplicant l'arrodoniment segons si es
+    material divisible o no.
+    
+ */
     
     if (menu_pagament) {
         menu_pagament.close()
@@ -38,6 +54,10 @@ function accio_menu_pagament(selection: string, selectedIndex: any) {
     let unitats_a_pagar = valor_total_operacio / valor_unitari_pago
     if (selection != "Patates _kg_" && selection != "Llenya _kg_") {
         unitats_a_pagar = Math.round(unitats_a_pagar)
+        if (unitats_a_pagar == 0) {
+            unitats_a_pagar = 1
+        }
+        
     } else {
         unitats_a_pagar = Math.round(unitats_a_pagar * 100) / 100
     }
@@ -47,6 +67,7 @@ function accio_menu_pagament(selection: string, selectedIndex: any) {
 }
 
 function obrir_selector_pagament() {
+    /** Genera el menú de pagament excloent el producte que es vol. */
     
     let tots_els_productes = ["Llenya _kg_", "Gallines", "Patates _kg_", "Cabres", "Ous", "Cavalls"]
     let llista_opcions = []
@@ -56,19 +77,22 @@ function obrir_selector_pagament() {
         }
         
     }
-    menu_pagament = miniMenu.createMenu(miniMenu.createMenuItem("Cargando..."))
+    menu_pagament = miniMenu.createMenu(miniMenu.createMenuItem(""))
     menu_pagament.setMenuItems(llista_opcions)
     menu_pagament.setTitle("Quin producte vols donar?")
-    menu_pagament.setMenuStyleProperty(miniMenu.MenuStyleProperty.Width, 140)
-    menu_pagament.setMenuStyleProperty(miniMenu.MenuStyleProperty.Height, 150)
-    menu_pagament.x = 129
-    menu_pagament.y = 180
+    menu_pagament.setMenuStyleProperty(miniMenu.MenuStyleProperty.Width, 150)
+    menu_pagament.setMenuStyleProperty(miniMenu.MenuStyleProperty.Height, 70)
+    menu_pagament.setFlag(SpriteFlag.RelativeToCamera, true)
+    menu_pagament.x = 80
+    menu_pagament.y = 60
     menu_pagament.onButtonPressed(controller.A, function on_pagament_pressed(selection: string, selectedIndex: any) {
         accio_menu_pagament(selection, selectedIndex)
     })
 }
 
+//  Menú de quantitat
 function accio_menu_quantitat(selection: any, selected_index: any) {
+    /** Gestiona el comptador de quantitat */
     
     if (selection == "+ Més") {
         quantitat_actual += 1
@@ -87,86 +111,79 @@ function accio_menu_quantitat(selection: any, selected_index: any) {
 }
 
 function obrir_selector_quantitat(nom_producte: string) {
+    /** Obre el menú de quantitat */
     
     producte_actual = nom_producte
     quantitat_actual = 1
     menu_quantitat = miniMenu.createMenu(miniMenu.createMenuItem("+ Més"), miniMenu.createMenuItem("- Menys"), miniMenu.createMenuItem("CONFIRMAR"))
     menu_quantitat.setTitle("Canviant: " + producte_actual + " (" + ("" + quantitat_actual) + ")")
-    menu_quantitat.setMenuStyleProperty(miniMenu.MenuStyleProperty.Width, 140)
-    menu_quantitat.setMenuStyleProperty(miniMenu.MenuStyleProperty.Height, 130)
-    menu_quantitat.x = 129
-    menu_quantitat.y = 190
+    menu_quantitat.setMenuStyleProperty(miniMenu.MenuStyleProperty.Width, 150)
+    menu_quantitat.setMenuStyleProperty(miniMenu.MenuStyleProperty.Height, 70)
+    menu_quantitat.setFlag(SpriteFlag.RelativeToCamera, true)
+    menu_quantitat.x = 80
+    menu_quantitat.y = 60
     menu_quantitat.onButtonPressed(controller.A, function on_button_pressed(selection: any, selectedIndex: any) {
         accio_menu_quantitat(selection, selectedIndex)
     })
 }
 
+//  Menú principal
 function accio_menu_principal(selection: string, selectedIndex: any) {
+    /** Gestiona les accions de la selecció del menú principal */
     
     if (menu1) {
         menu1.close()
     }
     
-    obrir_selector_quantitat(selection)
+    if (selection == "SORTIR") {
+        controller.moveSprite(nena, 100, 100)
+    } else {
+        obrir_selector_quantitat(selection)
+    }
+    
 }
 
+//  ESDEVENIMENTS I CONTROLS
 sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC, function on_overlap(sprite: Sprite, otherSprite: Sprite) {
+    /** 
+    Es dispara quan la nena toca el venedor.
+    Atura el jugador i obre el menú principal.
+    
+ */
     
     sprite.y += 5
     controller.moveSprite(nena, 0, 0)
-    menu1 = miniMenu.createMenu(miniMenu.createMenuItem("Llenya _kg_"), miniMenu.createMenuItem("Gallines"), miniMenu.createMenuItem("Patates _kg_"), miniMenu.createMenuItem("Cabres"), miniMenu.createMenuItem("Ous"), miniMenu.createMenuItem("Cavalls"))
+    menu1 = miniMenu.createMenu(miniMenu.createMenuItem("Llenya _kg_"), miniMenu.createMenuItem("Gallines"), miniMenu.createMenuItem("Patates _kg_"), miniMenu.createMenuItem("Cabres"), miniMenu.createMenuItem("Ous"), miniMenu.createMenuItem("Cavalls"), miniMenu.createMenuItem("SORTIR"))
     menu1.setTitle("Quin producte vols intercanviar?")
-    menu1.setMenuStyleProperty(miniMenu.MenuStyleProperty.Width, 140)
-    menu1.setMenuStyleProperty(miniMenu.MenuStyleProperty.Height, 150)
-    menu1.x = 129
-    menu1.y = 180
+    menu1.setMenuStyleProperty(miniMenu.MenuStyleProperty.Width, 150)
+    menu1.setMenuStyleProperty(miniMenu.MenuStyleProperty.Height, 100)
+    menu1.setFlag(SpriteFlag.RelativeToCamera, true)
+    menu1.x = 80
+    menu1.y = 60
     menu1.onButtonPressed(controller.A, function on_button_pressed(selection: string, selectedIndex: any) {
         accio_menu_principal(selection, selectedIndex)
     })
 })
-//  ANIMACIONS NENA
-//  Amunt
+//  Animacions de moviment
 controller.up.onEvent(ControllerButtonEvent.Pressed, function on_up_pressed() {
-    animation.runImageAnimation(nena, assets.animation`
-            nena-animation-up
-            `, 100, true)
+    animation.runImageAnimation(nena, assets.animation`nena-animation-up`, 100, true)
 })
-//  Esquerra
 controller.left.onEvent(ControllerButtonEvent.Pressed, function on_left_pressed() {
-    animation.runImageAnimation(nena, assets.animation`
-            nena-animation-left
-            `, 100, true)
+    animation.runImageAnimation(nena, assets.animation`nena-animation-left`, 100, true)
 })
-//  Dreta
 controller.right.onEvent(ControllerButtonEvent.Pressed, function on_right_pressed() {
-    animation.runImageAnimation(nena, assets.animation`
-            nena-animation-right
-            `, 100, true)
+    animation.runImageAnimation(nena, assets.animation`nena-animation-right`, 100, true)
 })
-//  Abaix
 controller.down.onEvent(ControllerButtonEvent.Pressed, function on_down_pressed() {
-    animation.runImageAnimation(nena, assets.animation`
-            nena-animation-down
-            `, 100, true)
+    animation.runImageAnimation(nena, assets.animation`nena-animation-down`, 100, true)
 })
-let nena : Sprite = null
-//  Mapa
-tiles.setCurrentTilemap(tilemap`
-    map
-    `)
-//  Sprites
-let casa_intercanvi = sprites.create(assets.image`
-        casa_intercanvi
-        `, SpriteKind.edifici)
+//  INICIALITZACIÓ DEL JOC
+tiles.setCurrentTilemap(tilemap`map`)
+let casa_intercanvi = sprites.create(assets.image`casa_intercanvi`, SpriteKind.edifici)
 casa_intercanvi.setPosition(129, 130)
-let venedor = sprites.create(assets.image`
-    venedor-front
-    `, SpriteKind.NPC)
+let venedor = sprites.create(assets.image`venedor-front`, SpriteKind.NPC)
 venedor.setPosition(129, 140)
-nena = sprites.create(assets.image`
-    nena-front
-    `, SpriteKind.Player)
+nena = sprites.create(assets.image`nena-front`, SpriteKind.Player)
 nena.setPosition(129, 250)
-//  Ajusts de càmara i moviment de la nena
 scene.cameraFollowSprite(nena)
 controller.moveSprite(nena, 100, 100)
