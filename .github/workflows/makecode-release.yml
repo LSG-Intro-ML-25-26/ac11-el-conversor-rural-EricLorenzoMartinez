@@ -4,10 +4,6 @@ on:
   release:
     types:
       - created
-
-permissions:
-  contents: write
-
 jobs:
   build:
 
@@ -15,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [8.x]
 
     steps:
       - uses: actions/checkout@v1
