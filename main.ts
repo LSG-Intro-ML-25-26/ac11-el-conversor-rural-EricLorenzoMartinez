@@ -16,6 +16,7 @@ function obtenir_preu(nom_producte: string): number {
     /** 
     Retorna el valor en Llenya de cada producte.
     Permet gestionar l'intercanvi bidireccional.
+    Avisa al jugador en cas d'estar pagant de més.
     
  */
     if (nom_producte == "Llenya _kg_") {
