@@ -54,7 +54,7 @@ jobs:
         run: |
           pxt clean
           pxt install
-          pxt staticpkg
+          pxt build --cloud
           
       - name: bundle all
         run: |
@@ -73,4 +73,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./built
+          publish_dir: .
