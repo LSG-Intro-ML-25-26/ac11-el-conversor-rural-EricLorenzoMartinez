@@ -1,8 +1,10 @@
 @namespace
 class SpriteKind:
     edifici = SpriteKind.create()
-# Amunt
 
+
+# ANIMACIONS NENA
+# Amunt
 def on_up_pressed():
     animation.run_image_animation(nena,
         assets.animation("""
@@ -12,9 +14,7 @@ def on_up_pressed():
         True)
 controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
 
-# ANIMACIONS NENA
 # Esquerra
-
 def on_left_pressed():
     animation.run_image_animation(nena,
         assets.animation("""
@@ -25,7 +25,6 @@ def on_left_pressed():
 controller.left.on_event(ControllerButtonEvent.PRESSED, on_left_pressed)
 
 # Dreta
-
 def on_right_pressed():
     animation.run_image_animation(nena,
         assets.animation("""
@@ -36,7 +35,6 @@ def on_right_pressed():
 controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
 
 # Abaix
-
 def on_down_pressed():
     animation.run_image_animation(nena,
         assets.animation("""
@@ -46,10 +44,17 @@ def on_down_pressed():
         True)
 controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
 
+# Declaració sprites
 nena: Sprite = None
+casa_intercanvi: Sprite = None
+venedor: Sprite = None
+
+# Mapa
 tiles.set_current_tilemap(tilemap("""
     map
     """))
+
+# Sprites
 casa_intercanvi = sprites.create(assets.image("""
         casa_intercanvi
         """),
@@ -64,5 +69,6 @@ nena = sprites.create(assets.image("""
     nena-front
     """), SpriteKind.player)
 nena.set_position(129, 250)
+# Ajusts de càmara i moviment de la nena
 scene.camera_follow_sprite(nena)
 controller.move_sprite(nena, 100, 100)
